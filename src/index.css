@@ -13,3 +13,13 @@ body {
 .react-tel-input .form-control {
   @apply !w-full py-6 !text-base;
 } 
+
+
+
+.otp-field input:last-child{
+  @apply !mr-0
+}
+
+.resendOTP button {
+  @apply ml-3
+}
