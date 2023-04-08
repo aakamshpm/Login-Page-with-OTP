@@ -14,7 +14,9 @@ body {
   @apply !w-full py-6 !text-base;
 } 
 
-
+.otp-field input{
+  @apply outline-none
+}
 
 .otp-field input:last-child{
   @apply !mr-0
