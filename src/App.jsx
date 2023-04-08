@@ -17,25 +17,23 @@ const App = () => {
   const [loading, setLoading] = useState(false)
   const [showOTP, setShowOTP] = useState(false)
   const [OTP, setOTP] = useState('');
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(null);
 
   function onCaptchaVerify() {
-    if(!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
-        'size': 'invisible',
-        'callback': (response) => {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-          onSignInSubmit();
-        }
-      }, auth);
-    }
+    window.recaptchaVerifier = new RecaptchaVerifier('sign-in-button', {
+      'size': 'invisible',
+      'callback': (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        onSignInSubmit();
+      }
+    }, auth);
   }
 
   function onSignInSubmit() {
     setLoading(true);
     onCaptchaVerify();
     const phoneNumber = '+' + phone;
-    console.log(phone)
+    // console.log(phoneNumber)
     const appVerifier = window.recaptchaVerifier;
     signInWithPhoneNumber(auth, phoneNumber, appVerifier)
     .then((confirmationResult) => {
@@ -99,7 +97,11 @@ const App = () => {
                     disabled={false}
                   />
                   </div>
-                  <button onClick={onOTPVerify} className='text-white flex bg-gray-800 p-4 items-center justify-center gap-5 w-72'>
+                  <button 
+                    onClick={() => {
+                      {OTP.length == 6 ? onOTPVerify() : toast.info("Enter your OTP", {position: toast.POSITION.TOP_CENTER})} 
+                    }}
+                    className='text-white flex bg-gray-800 p-4 items-center justify-center gap-5 w-72'>
                     {
                       loading && <ImSpinner2 className='animate-spin' />
                     }
@@ -108,7 +110,7 @@ const App = () => {
                   <div className='resendOTP text-white'>
                     <ResendOTP 
                       maxTime='30'
-                      onResendClick={() => console.log("Resend clicked")} 
+                      onResendClick={onSignInSubmit} 
                       />
                   </div>
                 </div>
@@ -124,7 +126,9 @@ const App = () => {
                     onChange={setPhone}
                   />
                 </div>
-                <button onClick={onSignInSubmit} className='text-white flex bg-gray-800 p-4 items-center justify-center gap-5 w-72'>
+                <button 
+                  onClick={() => {phone.length == '12' ? onSignInSubmit() : toast.info("Enter a valid phone number", {position: toast.POSITION.TOP_CENTER})}} 
+                  className='text-white flex bg-gray-800 p-4 items-center justify-center gap-5 w-72'>
                   {
                     loading && <ImSpinner2 className='animate-spin' />
                   }
